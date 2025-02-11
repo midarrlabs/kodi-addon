@@ -1,6 +1,6 @@
 import sys
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, patch, call
 
 sys.argv = ["plugin.video.midarr", "1", ""]
 
@@ -12,7 +12,7 @@ sys.modules["xbmcgui"] = mock_xbmcgui
 sys.modules["xbmcplugin"] = mock_xbmcplugin
 sys.modules["xbmcaddon"] = mock_xbmcaddon
 
-from addon import list_libraries, router, HANDLE
+from addon import home, router, HANDLE
 
 class TestKodiPlugin(unittest.TestCase):
 
@@ -20,23 +20,27 @@ class TestKodiPlugin(unittest.TestCase):
     @patch("xbmcplugin.addSortMethod")
     @patch("xbmcplugin.endOfDirectory")
     @patch("xbmcgui.ListItem")
-    def test_list_libraries(self, mock_list_item, mock_end_of_directory, mock_add_sort_method, mock_add_directory_item):
-        """Test that list_libraries correctly adds a directory item."""
-        mock_item = MagicMock()
-        mock_list_item.return_value = mock_item
+    def test_home(self, mock_list_item, mock_end_of_directory, mock_add_sort_method, mock_add_directory_item):
 
-        list_libraries()
+        mock_item_search = MagicMock()
+        mock_item_movies = MagicMock()
+    
+        mock_list_item.side_effect = [mock_item_search, mock_item_movies]
 
-        mock_list_item.assert_called_once()
-        mock_add_directory_item.assert_called_with(HANDLE, 'plugin.video.midarr?action=movies', mock_item, isFolder=True)
-        mock_add_sort_method.assert_called_once_with(HANDLE, sys.modules["xbmcplugin"].SORT_METHOD_LABEL_IGNORE_THE)
+        home()
+
+        mock_add_directory_item.assert_has_calls([
+            call(handle=HANDLE, url='plugin.video.midarr?action=search', listitem=mock_item_search, isFolder=True),
+            call(handle=HANDLE, url='plugin.video.midarr?action=movies', listitem=mock_item_movies, isFolder=True)
+        ], any_order=False)
+
         mock_end_of_directory.assert_called_once_with(HANDLE)
 
-    @patch("addon.list_libraries")
-    def test_router_no_params(self, mock_list_libraries):
-        """Test that router calls list_libraries when no params are given."""
+    @patch("addon.home")
+    def test_router_no_params(self, mock_home):
+        """Test that router calls home when no params are given."""
         router("")
-        mock_list_libraries.assert_called_once()
+        mock_home.assert_called_once()
 
     def test_router_invalid_param(self):
         """Test that router raises an exception for invalid params."""

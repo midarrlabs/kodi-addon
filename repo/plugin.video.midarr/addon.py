@@ -8,17 +8,15 @@ URL, HANDLE = sys.argv[0], int(sys.argv[1])
 def get_url(**kwargs):
     return f"{URL}?{urlencode(kwargs)}"
 
-def list_libraries():
-    list_item = xbmcgui.ListItem("Movies")
-
-    xbmcplugin.addDirectoryItem(HANDLE, get_url(action="movies"), list_item, isFolder=True)
-    xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
+def home():
+    xbmcplugin.addDirectoryItem(handle=HANDLE, url=get_url(action="search"), listitem=xbmcgui.ListItem(label="Search"), isFolder=True)
+    xbmcplugin.addDirectoryItem(handle=HANDLE, url=get_url(action="movies"), listitem=xbmcgui.ListItem(label="Movies"), isFolder=True)
     xbmcplugin.endOfDirectory(HANDLE)
 
 def router(param_string):
     params = dict(parse_qsl(param_string))
     if not params:
-        list_libraries()
+        home()
     else:
         raise ValueError(f"Invalid param_string: {param_string}!")
 
