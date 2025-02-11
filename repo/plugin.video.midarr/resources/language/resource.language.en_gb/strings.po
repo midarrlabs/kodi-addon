@@ -9,10 +9,6 @@ msgctxt "#30000"
 msgid "General"
 msgstr "General"
 
-msgctxt "#30001"
-msgid "Experimental"
-msgstr "Experimental"
-
 msgctxt "#30002"
 msgid "URL"
 msgstr "URL"
@@ -20,11 +16,3 @@ msgstr "URL"
 msgctxt "#30003"
 msgid "API token"
 msgstr "API token"
-
-msgctxt "#30004"
-msgid "Add movies"
-msgstr "Add movies"
-
-msgctxt "#30005"
-msgid "Add series"
-msgstr "Add series"

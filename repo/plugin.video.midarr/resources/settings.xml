@@ -27,25 +27,4 @@
             </group>
         </category>
     </section>
-
-    <section id="plugin.video.midarr" label="30001">
-        <category id="experimental" label="30001">
-            <group id="2">
-                <setting id="addmovies" type="action" label="30004">
-                    <level>0</level>
-                    <data>RunPlugin(plugin://plugin.video.midarr/?action=add_movies)</data>
-                    <control type="button" format="action">
-                        <close>true</close>
-                    </control>
-                </setting>
-                <setting id="addseries" type="action" label="30005">
-                    <level>0</level>
-                    <data>RunPlugin(plugin://plugin.video.midarr/?action=add_series)</data>
-                    <control type="button" format="action">
-                        <close>true</close>
-                    </control>
-                </setting>
-            </group>
-        </category>
-    </section>
 </settings>
